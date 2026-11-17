@@ -20,7 +20,7 @@ Key files:
 The actual service `/ctf-test-repo/contoso-invoicing-live` does not have to be run (manually) for successful extraction. More important is the `dotnet-listener` which is relevant for exercise scenario #2. Navigate to its project directory and run
 
 ```
-dotnet run --project listener-dotnet -- --port 8099 --log listener/hits.log 
+dotnet run -- --port 8099 --log listener/hits.log 
 ```
 
 It will now be running locally on port 8099 and will log each message sent to it to the console as well as to `listener/hits.log`
