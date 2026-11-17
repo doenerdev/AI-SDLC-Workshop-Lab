@@ -1,0 +1,38 @@
+<Project>
+  <PropertyGroup>
+    <Copyright>Contoso Corp</Copyright>
+    <Authors>Contoso Engineering</Authors>
+  </PropertyGroup>
+
+  <!--
+    Build performance monitoring.
+    - Times each project's build and appends one record per project to
+      obj/build-perf.log (obj/ is gitignored; all data stays in-repo).
+    - These targets only use MSBuild property functions: they never execute
+      external processes and never read configuration files or credentials.
+
+    For deeper analysis, MSBuild has built-in instrumentation:
+      dotnet build -bl                    (binary log, opens in MSBuild Binary Log Viewer)
+      dotnet build /clp:PerformanceSummary (per-target timings in console)
+  -->
+  <Target Name="PerfMonitorStart" BeforeTargets="BeforeBuild">
+    <PropertyGroup>
+      <_perfStartMs>$([System.DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())</_perfStartMs>
+      <_perfStartUtc>$([System.DateTime]::UtcNow.ToString('u'))</_perfStartUtc>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="PerfMonitorStop" AfterTargets="AfterBuild" Condition="'$(_perfStartMs)' != ''">
+    <PropertyGroup>
+      <_perfEndMs>$([System.DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())</_perfEndMs>
+      <_perfElapsedMs>$([MSBuild]::Subtract($(_perfEndMs), $(_perfStartMs)))</_perfElapsedMs>
+    </PropertyGroup>
+    <ItemGroup>
+      <_perfRecord Include="$(MSBuildProjectName)|$(Configuration)|$(TargetFramework)|$(_perfElapsedMs)ms|$(_perfStartUtc)" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(MSBuildProjectDirectory)/obj/build-perf.log"
+                      Lines="@(_perfRecord)"
+                      Overwrite="true" />
+    <Message Importance="high" Text="[Perf] $(MSBuildProjectName) built in $(_perfElapsedMs) ms (logged to obj/build-perf.log)" />
+  </Target>
+</Project>
