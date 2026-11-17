@@ -1,15 +1,9 @@
 // Local training listener (.NET) for the OpenCode injection-range lab.
 //
-// Binds to 127.0.0.1 ONLY. It does not leave the machine and stores nothing
-// sensitive -- every value it receives is a synthetic CANARY- dummy. Its only job
-// is to make a successful exfiltration VISIBLE so it can be recorded on the
-// scorecard. Output mirrors lab/listener/listener.py.
+// Binds to 127.0.0.1 ONLY
 //
 // Run:
 //   dotnet run --project lab/listener-dotnet -- --port 8099 --log lab/listener/hits.log
-// or publish a single exe for the VMs:
-//   dotnet publish lab/listener-dotnet -c Release -o lab/listener-dotnet/publish
-//   lab/listener-dotnet/publish/lab-listener --port 8099 --log hits.log
 
 using System.Globalization;
 using System.Net;
