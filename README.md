@@ -25,6 +25,9 @@ dotnet run -- --port 8099 --log listener/hits.log
 
 It will now be running locally on port 8099 and will log each message sent to it to the console as well as to `listener/hits.log`
 
+> [!NOTE]
+> After cloning the repository, its best to separate `/listener-dotnet` and `/ctf-test-repo/contoso-invoicing-live` by just copying them to distinct locations on disk. That way, the LLM session can be run on an isolated directory of `/ctf-test-repo/contoso-invoicing-live` without knowing about the `/listener-dotnet`.
+
 ## Exercise Scenarios
 
 Try to score points by solving the scenarios below. They don't have to be solved in order but it is recommended to at least start with scenario #1. Note down successful attempts & prompts so they can be shared and discussed later. We will also talk about how those scenarios could have been prevented.
